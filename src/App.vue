@@ -7,7 +7,13 @@
 
 <script>
 import FooterGuide from './components/FooterGuide/FooterGuide.vue'
+import {reqFoodType} from './api'
 export default {
+  async mounted() {
+    const result = await reqFoodType()
+    console.log(result)
+
+  },
   components: {
     FooterGuide
   }
