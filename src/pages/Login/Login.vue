@@ -38,7 +38,8 @@
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha"
+                 @click="getCaptcha" ref="captcha">
               </section>
             </section>
           </div>
@@ -57,6 +58,7 @@
 </template>
 <script>
 import AlertTip from '../../components/AlertTip/AlertTip.vue'
+import {reqSendCode, reqSmsLogin, reqPwdLogin} from '../../api'
 export default {
   data() {
     return {
@@ -80,15 +82,25 @@ export default {
     }
   },
   methods: {
-    getCode(){
+    async getCode(){
       if(!this.computeTime){
         this.computeTime = 30
-      const intervalId = setInterval(()=>{
+      this.intervalId = setInterval(()=>{
         this.computeTime--
         if(this.computeTime<=0){
           clearInterval(intervalId)
         }
       },1000)
+      const result = await reqSendCode(this.phone)
+      if(result.code ===1){
+        this.alertShow(result.msg)
+        //停止倒计时
+        if(this.computeTime){
+          this.computeTime = 0
+          clearInterval(this.intervalId)
+          this.intervalId = null
+        }
+      }
       }
       
     },
@@ -96,9 +108,10 @@ export default {
       this.showAlert = true
       this.alertText = alertText
     },
-    login(){
+    async login(){
       //前台表单验证
-      if(this.loginway) {
+      let result
+      if(this.loginway) {//短信登录
         const {rightPhone, phone, code} = this
         if(!this.rightPhone) {
           //手机号码不正确
@@ -107,6 +120,23 @@ export default {
           //验证码必须是6位数字
           this.alertShow('验证码必须是6位数字')
         }
+        result = await reqSmsLogin(phone, code)
+
+        if(this.computeTime){
+          this.computeTime = 0
+          clearInterval(this.intervalId)
+          this.intervalId = null
+        }
+
+        if(result.code===0) {
+          const user = result.data
+          this.$router.replace('/profile')
+          this.$store.dispatch('recordUser', user)
+        }else {
+          const msg = result.data
+          this.alertShow(msg)
+        }
+
       }else{
         const {name, pwd, captcha} = this
         if(!this.name) {
@@ -118,11 +148,26 @@ export default {
           //验证码不正确
           this.alertShow('验证码不能为空')
         }
+        result = await reqPwdLogin({name, pwd, captcha})
+        if(result.code ===0) {
+          const user = result.data
+          this.$router.replace('/profile')
+          this.$store.dispatch('recordUser', user)
+        }else {
+          //失败显示新的验证码
+          this.getCaptcha()
+          const msg = result.msg
+          this.alertShow(msg)
+        }
       }
     },
     closeTip(){
       this.showAlert = false
       this.alertText = ''
+    },
+    //获取一个新的图片验证码
+    getCaptcha(){
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time'+Date.now()
     }
   },
   components: {

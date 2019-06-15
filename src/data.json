@@ -1,0 +1,19 @@
+{
+    "goods": [
+        {
+            "name": "xxx",
+            "food": [
+                {
+                    "name": "yyy",
+                    "price": 9
+                }
+            ]
+        }
+    ],
+    "rating": [
+
+    ],
+    "info": {
+        
+    }
+}
