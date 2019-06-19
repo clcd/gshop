@@ -7,5 +7,7 @@ export default {
     userinfo: {},//用户信息
     goods: [], //商品列表
     rating: [], //商家列表评价
-    info: {} //商家信息
+    info: {}, //商家信息
+    cartfoods: [],//购物车中食物列表
+    searchShops: []//搜索得到的商家列表
     }

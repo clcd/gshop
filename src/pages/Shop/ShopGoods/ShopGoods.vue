@@ -32,6 +32,7 @@
                 class="food-item bottom-border-1px"
                 v-for="(foods, index) in good.foods"
                 :key="index"
+                @click="showFood(foods)"
               >
                 <div class="icon">
                   <img width="57" height="57" :src="foods.image">
@@ -56,7 +57,9 @@
           </li>
         </ul>
       </div>
+      <ShopCart /> 
     </div>
+    <Food :food="food" ref="food"/>>
   </div>
 </template>
 
@@ -64,13 +67,16 @@
 import BScroll from "better-scroll";
 import { mapState } from "vuex";
 import CartControl from '../CartControl/CartControl.vue'
+import Food from '../Food/Food.vue'
+import ShopCart from '../ShopCart/ShopCart.vue'
 export default {
   data() {
     return {
       scrollY: 0, //右侧滑动条距离顶部的距离
       tops: [],
       menuScrollY: 0,
-      topm: []
+      topm: [],
+      food: {}
     };
   },
   methods: {
@@ -92,7 +98,7 @@ export default {
       });
 
       this.foodsScroll = new BScroll(".foods-wrapper", {
-        probeType: 2, // 因为惯性滑动不会触发
+        probeType: 3, // 因为惯性滑动不会触发
         click: true
       });
 
@@ -169,6 +175,11 @@ export default {
           this.menuScrollY = this.topm[this.currentIndex - 1];
         }
       }
+    },
+    showFood(food){
+      this.food = food
+      //父组件调用子组件的方法
+      this.$refs.food.toggleShow()
     }
   },
   mounted() {
@@ -200,7 +211,9 @@ export default {
     }
   },
   components: {
-    CartControl
+    CartControl,
+    Food,
+    ShopCart
   }
 };
 </script>
