@@ -86,7 +86,7 @@ export default {
         if(!this.info.pics) {
             return
         }
-        this._initScroll
+        this._initScroll()
     },
     methods: {
         _initScroll(){

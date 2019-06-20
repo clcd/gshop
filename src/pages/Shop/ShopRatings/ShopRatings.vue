@@ -66,7 +66,7 @@
                 <span class="iconfont" :class="rat.rateType===0?'icon-thumb_up':'icon-thumb_down'"></span>
                 <span class="item" v-for="(item, index) in rat.recommend" :key="index">{{item}}</span>
               </div>
-              <div class="time">{{rat.rateTime}}</div>
+              <div class="time">{{rat.rateTime | dataFormat}}</div>
             </div>
           </li>
         </ul>

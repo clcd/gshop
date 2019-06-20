@@ -98,7 +98,7 @@ export default {
       });
 
       this.foodsScroll = new BScroll(".foods-wrapper", {
-        probeType: 3, // 因为惯性滑动不会触发
+        probeType: 2, // 因为惯性滑动不会触发
         click: true
       });
 

@@ -23,5 +23,8 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
+* {
+  touch-action: none;
+}
 </style>
