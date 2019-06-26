@@ -1,5 +1,5 @@
 ## 1. 项目运行
-    下载后台gshop-server并运行(node.js+express+mongdb)
+    下载后台gshop-server并运行(node.js+express+mongodb)
     npm install 安装依赖的包
     npm start前改一下config/index里面的host
     
